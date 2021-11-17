@@ -10,7 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: php-actions/composer@v6
+    - name: Install dependencies
+      uses: php-actions/composer@v6
+      with:
+        dev: no
+        php_version: 7.4
+        progress: yes
     - name: rsync deployments
       uses: burnett01/rsync-deployments@4.1
       with:
