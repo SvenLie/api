@@ -44,6 +44,8 @@ class TimetableController extends Controller
      * @throws \Exception
      */
     public function index(Request $request, $course) {
+        header('Content-Type: text/html; charset=ISO-8859-1');
+
         $week = $request->get("week");
         $year = $request->get("year");
         $group = $request->get("group");
@@ -88,7 +90,7 @@ class TimetableController extends Controller
                 $lecture->setLecturer($lecturer);
 
                 $lectures[] = [
-                    "module" => $lecture->getModule(),
+                    "module" => mb_detect_encoding($lecture->getModule()) != "UTF-8" ? utf8_encode($lecture->getModule()) : $lecture->getModule(),
                     "moduleNumber" => $lecture->getModuleNumber(),
                     "link" => $lecture->getLink(),
                     "type" => $lecture->getType(),
