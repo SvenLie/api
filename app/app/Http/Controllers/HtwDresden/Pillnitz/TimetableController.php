@@ -60,7 +60,7 @@ class TimetableController extends Controller
 
         libxml_use_internal_errors(true);
         $html = new \DOMDocument;
-        $html->loadHTML('<?xml encoding="ISO-8859-1">' . $this->getTimetable($course, $week, $group));
+        $html->loadHTML($this->getTimetable($course, $week, $group));
         $xpath = new \DOMXPath($html);
         $tableRows = $xpath->query("//span[contains(@class,'lilli')]/following::table[1]/tr");
 
@@ -90,7 +90,7 @@ class TimetableController extends Controller
                 $lecture->setLecturer($lecturer);
 
                 $lectures[] = [
-                    "module" => mb_detect_encoding($lecture->getModule()) != "UTF-8" ? utf8_encode($lecture->getModule()) : $lecture->getModule(),
+                    "module" => mb_detect_encoding($lecture->getModule()) == "UTF-8" ? utf8_decode($lecture->getModule()) : $lecture->getModule(),
                     "moduleNumber" => $lecture->getModuleNumber(),
                     "link" => $lecture->getLink(),
                     "type" => $lecture->getType(),
