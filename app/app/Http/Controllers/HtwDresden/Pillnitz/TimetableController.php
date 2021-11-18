@@ -72,7 +72,7 @@ class TimetableController extends Controller
             for ($j = 1; $j < $tableRow->childNodes->count(); $j++) {
                 $cell = $tableRow->childNodes->item($j);
 
-                if ($cell->childNodes->count() != 6) {
+                if ($cell->childNodes->count() != 6 || $cell->childNodes->item(1)->childNodes->count() != 6) {
                     continue;
                 }
 
