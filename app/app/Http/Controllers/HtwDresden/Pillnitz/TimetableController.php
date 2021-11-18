@@ -118,11 +118,11 @@ class TimetableController extends Controller
     }
 
     function jsonRemoveUnicodeSequences($struct) {
-        return json_decode(html_entity_decode(preg_replace_callback("/\\\\u([a-f0-9]{4})/",
+        return json_decode(preg_replace_callback("/\\\\u([a-f0-9]{4})/",
             function ($matches) {
                 foreach ($matches as $match) {
                     return iconv('UCS-4LE','UTF-8',pack('V', hexdec($match)));
                 }
-            }, json_encode($struct))));
+            }, json_encode($struct)));
     }
 }
