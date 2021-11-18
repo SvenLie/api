@@ -14,7 +14,13 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    $routeCollection = Illuminate\Support\Facades\Route::getRoutes();
+    foreach ($routeCollection as $value) {
+        if ($value['uri'] == '/') {
+            continue;
+        }
+        echo $value['uri'] . "<br />";
+    }
 });
 
 $router->group(['prefix' => 'htw-dresden'], function () use ($router) {
