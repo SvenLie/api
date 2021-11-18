@@ -28,5 +28,9 @@ $router->group(['prefix' => 'htw-dresden'], function () use ($router) {
             'as' => 'courses', 'uses' => 'HtwDresden\Pillnitz\CourseController@index'
         ]);
 
+        $router->get('/weeks', [
+            'as' => 'weeks', 'uses' => 'HtwDresden\Pillnitz\WeeksController@index'
+        ]);
+
     });
 });
