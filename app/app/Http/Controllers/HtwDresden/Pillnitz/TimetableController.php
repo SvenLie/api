@@ -91,11 +91,11 @@ class TimetableController extends Controller
 
                 $lectures[] = [
                     "module" => mb_detect_encoding($lecture->getModule()) == "UTF-8" ? utf8_decode($lecture->getModule()) : $lecture->getModule(),
-                    "moduleNumber" => $lecture->getModuleNumber(),
+                    "moduleNumber" => mb_detect_encoding($lecture->getModuleNumber()) == "UTF-8" ? utf8_decode($lecture->getModuleNumber()) : $lecture->getModuleNumber(),
                     "link" => $lecture->getLink(),
-                    "type" => $lecture->getType(),
-                    "place" => $lecture->getPlace(),
-                    "lecturer" => $lecture->getLecturer(),
+                    "type" => mb_detect_encoding($lecture->getType()) == "UTF-8" ? utf8_decode($lecture->getType()) : $lecture->getType(),
+                    "place" => mb_detect_encoding($lecture->getPlace()) == "UTF-8" ? utf8_decode($lecture->getPlace()) : $lecture->getPlace(),
+                    "lecturer" => mb_detect_encoding($lecture->getLecturer()) == "UTF-8" ? utf8_decode($lecture->getLecturer()) : $lecture->getLecturer(),
                     "startingTimestamp" => $lecture->getStartingTimestamp(),
                     "endingTimestamp" => $lecture->getEndingTimestamp(),
                 ];
