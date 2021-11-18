@@ -101,7 +101,7 @@ class TimetableController extends Controller
             }
         }
 
-       return response()->json($this->jsonRemoveUnicodeSequences($lectures));
+        return response()->json($lectures);
 
     }
 
@@ -115,14 +115,5 @@ class TimetableController extends Controller
         $response = Http::get($url);
 
         return mb_convert_encoding($response->body(),"UTF-8","ISO-8859-1");
-    }
-
-    function jsonRemoveUnicodeSequences($struct) {
-        return json_decode(preg_replace_callback("/\\\\u([a-f0-9]{4})/",
-            function ($matches) {
-                foreach ($matches as $match) {
-                    return iconv('UCS-4LE','UTF-8',pack('V', hexdec($match)));
-                }
-            }, json_encode($struct)));
     }
 }
