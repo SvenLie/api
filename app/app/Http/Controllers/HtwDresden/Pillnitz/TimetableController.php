@@ -150,7 +150,7 @@ class TimetableController extends Controller
             $lectures = $timetableController->index($request, $course)->getData(true);
 
             foreach ($lectures as $lecture) {
-                $summary = str_replace(' ', '\s',$lecture['module'] . " - " . $lecture['type']);
+                $summary = str_replace(' ', '&nbsp;',$lecture['module'] . " - " . $lecture['type']);
 
                 $icalObject .=
                     "BEGIN:VEVENT
