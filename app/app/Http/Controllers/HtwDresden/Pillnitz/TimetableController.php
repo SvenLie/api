@@ -88,7 +88,7 @@ class TimetableController extends Controller
                 $lecture->setLecturer($lecturer);
 
                 $lectures[] = [
-                    "module" => mb_convert_encoding($lecture->getModule(),"HTML-ENTITIES"),
+                    "module" => $lecture->getModule(),
                     "moduleNumber" => $lecture->getModuleNumber(),
                     "link" => $lecture->getLink(),
                     "type" => $lecture->getType(),
