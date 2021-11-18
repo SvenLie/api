@@ -24,5 +24,9 @@ $router->group(['prefix' => 'htw-dresden'], function () use ($router) {
             'as' => 'timetable', 'uses' => 'HtwDresden\Pillnitz\TimetableController@index'
         ]);
 
+        $router->get('/courses', [
+            'as' => 'courses', 'uses' => 'HtwDresden\Pillnitz\CourseController@index'
+        ]);
+
     });
 });

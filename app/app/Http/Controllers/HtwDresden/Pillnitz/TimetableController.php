@@ -88,6 +88,10 @@ class TimetableController extends Controller
                 $lecture->setStartingTimestamp(strtotime($year . "W" . $week. " " . $this->times[$i]["start"] . "+". ($j - 1) ." day"));
                 $lecture->setEndingTimestamp(strtotime($year . "W" . $week. " " . $this->times[$i]["end"] . "+". ($j - 1)  ." day"));
 
+                if ($lecture->getStartingTimestamp() == "" || $lecture->getEndingTimestamp() == "") {
+                    return response()->json(['error' => 'Please check your week and year combination'], 500);
+                }
+
                 $place = substr($cell->childNodes->item(5)->nodeValue,0, strpos($cell->childNodes->item(5)->nodeValue, " -"));
                 $lecturer = substr($cell->childNodes->item(5)->nodeValue,strpos($cell->childNodes->item(5)->nodeValue, "- ") + 2);
                 $lecture->setPlace($place);

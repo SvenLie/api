@@ -9,7 +9,7 @@ class Lecture extends Model
     /**
      * @var string
      */
-    public $module;
+    protected $module;
 
     /**
      * @var string
