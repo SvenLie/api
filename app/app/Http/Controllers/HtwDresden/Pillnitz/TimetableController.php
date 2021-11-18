@@ -72,15 +72,17 @@ class TimetableController extends Controller
             for ($j = 1; $j < $tableRow->childNodes->count(); $j++) {
                 $cell = $tableRow->childNodes->item($j);
 
-                if ($cell->childNodes->count() != 6 || $cell->childNodes->item(1)->childNodes->count() != 4) {
+                if ($cell->childNodes->count() != 6) {
                     continue;
                 }
 
                 $lecture = new Lecture();
                 $lecture->setModule($cell->childNodes->item(1)->childNodes->item(0)->nodeValue);
                 $lecture->setModuleNumber(substr($cell->childNodes->item(1)->childNodes->item(2)->nodeValue,0,4));
-                if ($cell->childNodes->item(1)->childNodes->item(3)->hasAttributes()) {
+                if ($cell->childNodes->item(1)->childNodes->count() > 3 && $cell->childNodes->item(1)->childNodes->item(3)->hasAttributes()) {
                     $lecture->setLink($cell->childNodes->item(1)->childNodes->item(3)->attributes->item(0)->nodeValue);
+                } else {
+                    $lecture->setLink("");
                 }
                 $lecture->setType($cell->childNodes->item(3)->nodeValue);
                 $lecture->setStartingTimestamp(strtotime($year . "W" . $week. " " . $this->times[$i]["start"] . "+". ($j - 1) ." day"));
