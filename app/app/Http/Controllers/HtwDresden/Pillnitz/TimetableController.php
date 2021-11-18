@@ -79,7 +79,9 @@ class TimetableController extends Controller
                 $lecture = new Lecture();
                 $lecture->setModule($cell->childNodes->item(1)->childNodes->item(0)->nodeValue);
                 $lecture->setModuleNumber(substr($cell->childNodes->item(1)->childNodes->item(2)->nodeValue,0,4));
-                $lecture->setLink($cell->childNodes->item(1)->childNodes->item(3)->attributes->item(0)->nodeValue);
+                if ($cell->childNodes->item(1)->childNodes->item(3)->hasAttributes()) {
+                    $lecture->setLink($cell->childNodes->item(1)->childNodes->item(3)->attributes->item(0)->nodeValue);
+                }
                 $lecture->setType($cell->childNodes->item(3)->nodeValue);
                 $lecture->setStartingTimestamp(strtotime($year . "W" . $week. " " . $this->times[$i]["start"] . "+". ($j - 1) ." day"));
                 $lecture->setEndingTimestamp(strtotime($year . "W" . $week. " " . $this->times[$i]["end"] . "+". ($j - 1)  ." day"));
