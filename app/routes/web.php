@@ -16,3 +16,13 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => 'htw-dresden'], function () use ($router) {
+    $router->group(['prefix' => 'pillnitz'], function () use ($router) {
+
+        $router->get('/timetable/{course}', [
+            'as' => 'timetable', 'uses' => 'HtwDresden\Pillnitz\TimetableController@index'
+        ]);
+
+    });
+});
