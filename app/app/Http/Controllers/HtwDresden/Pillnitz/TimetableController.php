@@ -150,11 +150,13 @@ class TimetableController extends Controller
             $lectures = $timetableController->index($request, $course)->getData(true);
 
             foreach ($lectures as $lecture) {
+                $summary = str_replace(' ', '\s',$lecture['module'] . " - " . $lecture['type']);
+
                 $icalObject .=
                     "BEGIN:VEVENT
                     DTSTART: " . date(ICAL_FORMAT, $lecture['startingTimestamp']) . "
                     DTEND: " . date(ICAL_FORMAT, $lecture['endingTimestamp']) . "
-                    SUMMARY: " . $lecture['module'] . " - " . $lecture['type'] . "
+                    SUMMARY: " . $summary . "
                     UID: " . $lecture['startingTimestamp'] . "_". $lecture['moduleNumber'] . "
                     STATUS: CONFIRMED
                     LOCATION: " . $lecture['place'] ."
@@ -166,7 +168,7 @@ class TimetableController extends Controller
         header('Content-type: text/calendar; charset=utf-8');
         header('Content-Disposition: attachment; filename="cal.ics"');
 
-        //$icalObject = str_replace(' ', '', $icalObject);
+        $icalObject = str_replace(' ', '', $icalObject);
         echo $icalObject;
     }
 }
