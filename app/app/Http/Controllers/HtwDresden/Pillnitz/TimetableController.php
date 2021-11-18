@@ -58,7 +58,7 @@ class TimetableController extends Controller
 
         libxml_use_internal_errors(true);
         $html = new \DOMDocument;
-        $html->loadHTML('<?xml encoding="UTF-8">' . $this->getTimetable($course, $week, $group));
+        $html->loadHTML('<?xml encoding="ISO-8859-1">' . $this->getTimetable($course, $week, $group));
         $xpath = new \DOMXPath($html);
         $tableRows = $xpath->query("//span[contains(@class,'lilli')]/following::table[1]/tr");
 
