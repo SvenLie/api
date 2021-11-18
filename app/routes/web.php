@@ -26,6 +26,10 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix' => 'htw-dresden'], function () use ($router) {
     $router->group(['prefix' => 'pillnitz'], function () use ($router) {
 
+        $router->get('/timetable-ical/{course}', [
+            'as' => 'timetable-ical', 'uses' => 'HtwDresden\Pillnitz\TimetableController@ical'
+        ]);
+
         $router->get('/timetable/{course}', [
             'as' => 'timetable', 'uses' => 'HtwDresden\Pillnitz\TimetableController@index'
         ]);

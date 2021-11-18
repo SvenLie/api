@@ -126,4 +126,43 @@ class TimetableController extends Controller
 
         return mb_convert_encoding($response->body(),"UTF-8","ISO-8859-1");
     }
+
+    public function ical(Request $request, $course) {
+
+        define('ICAL_FORMAT','Ymd\THis\Z');
+        $weeksController = new WeeksController();
+        $timetableController = new TimetableController();
+        $weeks = $weeksController->index()->getData(true);
+
+        $icalObject = "BEGIN:VCALENDAR
+        VERSION:2.0
+        METHOD:PUBLISH
+        PRODID:-//HTWDD//Pillnitz//Lectures//DE\n";
+
+        foreach ($weeks as $week) {
+            $request = new Request();
+            $request->attributes->add(['year' => $week['year'], 'week' => $week['weekNumber']]);
+
+            $lectures = $timetableController->index($request, $course)->getData(true);
+
+            foreach ($lectures as $lecture) {
+                $icalObject .=
+                    "BEGIN:VEVENT
+                    DTSTART: " . date(ICAL_FORMAT, $lecture['startingTimestamp']) . "
+                    DTEND: " . date(ICAL_FORMAT, $lecture['endingTimestamp']) . "
+                    SUMMARY: " . $lecture['module'] . " - " . $lecture['type'] . "
+                    UID: " . $lecture['startingTimestamp'] . "_". $lecture['moduleNumber'] . "
+                    STATUS: CONFIRMED
+                    LOCATION: " . $lecture['place'] ."
+                    END:VEVENT\n";
+            }
+        }
+
+        $icalObject .= "END:VCALENDAR";
+        header('Content-type: text/calendar; charset=utf-8');
+        header('Content-Disposition: attachment; filename="cal.ics"');
+
+        $icalObject = str_replace(' ', '', $icalObject);
+        echo $icalObject;
+    }
 }

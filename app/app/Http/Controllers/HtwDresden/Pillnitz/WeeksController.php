@@ -37,7 +37,7 @@ class WeeksController extends Controller
 
             for ($i = 1; $i <= (int) $weekMaximum; $i++) {
                 $week = new Week();
-                $week->setWeekNumber($i);
+                $week->setWeekNumber("0" . $i);
                 $week->setYear((int) $currentYear + 1);
 
                 $weeks[] = [
@@ -48,7 +48,12 @@ class WeeksController extends Controller
         } else {
             for ($i = (int) $weekMinimum; $i <= (int) $weekMaximum; $i++) {
                 $week = new Week();
-                $week->setWeekNumber($i);
+                if (strlen($i) == 1) {
+                    $week->setWeekNumber("0" . $i);
+                } else {
+                    $week->setWeekNumber($i);
+                }
+
                 $week->setYear($currentYear);
 
                 $weeks[] = [
