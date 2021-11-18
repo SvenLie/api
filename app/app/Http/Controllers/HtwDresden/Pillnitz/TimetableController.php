@@ -128,6 +128,7 @@ class TimetableController extends Controller
     }
 
     public function ical(Request $request, $course) {
+        $group = $request->get("group");
 
         define('ICAL_FORMAT','Ymd\THis\Z');
         $weeksController = new WeeksController();
@@ -141,6 +142,9 @@ class TimetableController extends Controller
 
         foreach ($weeks as $week) {
             $request = new Request();
+            if ($group) {
+                $request->attributes->add(['group' => $group]);
+            }
             $request->attributes->add(['year' => $week['year'], 'week' => $week['weekNumber']]);
 
             $lectures = $timetableController->index($request, $course)->getData(true);
@@ -162,7 +166,7 @@ class TimetableController extends Controller
         header('Content-type: text/calendar; charset=utf-8');
         header('Content-Disposition: attachment; filename="cal.ics"');
 
-        $icalObject = str_replace(' ', '', $icalObject);
+        //$icalObject = str_replace(' ', '', $icalObject);
         echo $icalObject;
     }
 }
