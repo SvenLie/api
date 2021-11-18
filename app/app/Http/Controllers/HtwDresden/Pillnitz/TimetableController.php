@@ -135,10 +135,7 @@ class TimetableController extends Controller
         $timetableController = new TimetableController();
         $weeks = $weeksController->index()->getData(true);
 
-        $icalObject = "BEGIN:VCALENDAR
-        VERSION:2.0
-        METHOD:PUBLISH
-        PRODID:-//HTWDD//Pillnitz//Lectures//DE\n";
+        $icalObject = "BEGIN:VCALENDAR\nVERSION:2.0\nMETHOD:PUBLISH\nPRODID:-//HTWDD//Pillnitz//Lectures//DE\n";
 
         foreach ($weeks as $week) {
             $request = new Request();
@@ -152,15 +149,7 @@ class TimetableController extends Controller
             foreach ($lectures as $lecture) {
                 $summary = str_replace(' ', ' ',$lecture['module'] . " - " . $lecture['type']);
 
-                $icalObject .=
-                    "BEGIN:VEVENT
-                    DTSTART: " . date(ICAL_FORMAT, $lecture['startingTimestamp']) . "
-                    DTEND: " . date(ICAL_FORMAT, $lecture['endingTimestamp']) . "
-                    SUMMARY: " . $summary . "
-                    UID: " . $lecture['startingTimestamp'] . "_". $lecture['moduleNumber'] . "
-                    STATUS: CONFIRMED
-                    LOCATION: " . $lecture['place'] ."
-                    END:VEVENT\n";
+                $icalObject .= "BEGIN:VEVENT\nDTSTART:" . date(ICAL_FORMAT, $lecture['startingTimestamp']) . "\nDTEND:" . date(ICAL_FORMAT, $lecture['endingTimestamp']) . "\nSUMMARY:" . $summary . "\nUID:" . $lecture['startingTimestamp'] . "_". $lecture['moduleNumber'] . "\nSTATUS:CONFIRMED\nLOCATION:" . $lecture['place'] ."\nEND:VEVENT\n";
             }
         }
 
@@ -168,7 +157,7 @@ class TimetableController extends Controller
         header('Content-type: text/calendar; charset=utf-8');
         header('Content-Disposition: attachment; filename="cal.ics"');
 
-        $icalObject = str_replace(' ', '', $icalObject);
+        //$icalObject = str_replace(' ', '', $icalObject);
         echo $icalObject;
     }
 }
