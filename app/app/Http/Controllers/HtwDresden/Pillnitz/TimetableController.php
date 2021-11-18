@@ -88,7 +88,7 @@ class TimetableController extends Controller
                 $lecture->setLecturer($lecturer);
 
                 $lectures[] = [
-                    "module" => $lecture->getModule(),
+                    "module" => mb_convert_encoding($lecture->getModule(),"HTML-ENTITIES"),
                     "moduleNumber" => $lecture->getModuleNumber(),
                     "link" => $lecture->getLink(),
                     "type" => $lecture->getType(),
@@ -101,7 +101,7 @@ class TimetableController extends Controller
             }
         }
 
-        return response()->json($lectures);
+       return response()->json($this->jsonRemoveUnicodeSequences($lectures));
 
     }
 
@@ -115,5 +115,14 @@ class TimetableController extends Controller
         $response = Http::get($url);
 
         return mb_convert_encoding($response->body(),"UTF-8","ISO-8859-1");
+    }
+
+    function jsonRemoveUnicodeSequences($struct) {
+        return json_decode(html_entity_decode(preg_replace_callback("/\\\\u([a-f0-9]{4})/",
+            function ($matches) {
+                foreach ($matches as $match) {
+                    return iconv('UCS-4LE','UTF-8',pack('V', hexdec($match)));
+                }
+            }, json_encode($struct))));
     }
 }
