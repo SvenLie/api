@@ -21,8 +21,6 @@ class WeeksController extends Controller
 
         $weeks = [];
         $currentYear = $this->getCurrentYear();
-        print_r($weekMinimum);
-        print_r($this->getIsoWeeksInYear($currentYear));
 
         if ($weekMaximum < $weekMinimum) {
             // winter semester
@@ -59,7 +57,7 @@ class WeeksController extends Controller
                 ];
             }
         }
-        
+
         return response()->json($weeks);
     }
 
