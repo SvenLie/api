@@ -21,8 +21,13 @@ class WeeksController extends Controller
 
         $weeks = [];
         $currentYear = $this->getCurrentYear();
+        $currentWeek = $this->getCurrentWeek();
 
         if ($weekMaximum < $weekMinimum) {
+            if ($currentWeek < $weekMinimum) {
+                $currentYear = $currentYear - 1;
+            }
+
             // winter semester
             for ($i = (int) $weekMinimum; $i <= (int) $this->getIsoWeeksInYear($currentYear); $i++) {
                 $week = new Week();
