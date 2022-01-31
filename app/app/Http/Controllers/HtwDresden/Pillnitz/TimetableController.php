@@ -68,32 +68,44 @@ class TimetableController extends Controller
 
         for ($i = 1; $i < $tableRows->count(); $i++) {
             $tableRow = $tableRows->item($i);
-
             for ($j = 1; $j < $tableRow->childNodes->count(); $j++) {
                 $cell = $tableRow->childNodes->item($j);
 
-                if ($cell->childNodes->count() != 6) {
+                if ($cell->childNodes->count() != 6 && $cell->childNodes->count() != 7) {
                     continue;
                 }
 
                 $lecture = new Lecture();
-                $lecture->setModule($cell->childNodes->item(1)->childNodes->item(0)->nodeValue);
-                $lecture->setModuleNumber(substr($cell->childNodes->item(1)->childNodes->item(2)->nodeValue,0,4));
+                if($cell->childNodes->count() == 7) {
+                    $lecture->setModule($cell->childNodes->item(1)->childNodes->item(0)->nodeValue . ' ' . $cell->childNodes->item(1)->childNodes->item(2)->nodeValue);
+                    $lecture->setModuleNumber(substr($cell->childNodes->item(3)->nodeValue, 0, 4));
+
+                } else {
+                    $lecture->setModule($cell->childNodes->item(1)->childNodes->item(0)->nodeValue);
+                    $lecture->setModuleNumber(substr($cell->childNodes->item(1)->childNodes->item(2)->nodeValue, 0, 4));
+                }
+
+
                 if ($cell->childNodes->item(1)->childNodes->count() > 3 && $cell->childNodes->item(1)->childNodes->item(3)->hasAttributes()) {
                     $lecture->setLink($cell->childNodes->item(1)->childNodes->item(3)->attributes->item(0)->nodeValue);
                 } else {
                     $lecture->setLink("");
                 }
                 $lecture->setType($cell->childNodes->item(3)->nodeValue);
-                $lecture->setStartingTimestamp(strtotime($year . "W" . $week. " " . $this->times[$i]["start"] . "+". ($j - 1) ." day"));
-                $lecture->setEndingTimestamp(strtotime($year . "W" . $week. " " . $this->times[$i]["end"] . "+". ($j - 1)  ." day"));
+                $lecture->setStartingTimestamp(strtotime($year . "W" . $week . " " . $this->times[$i]["start"] . "+" . ($j - 1) . " day"));
+                $lecture->setEndingTimestamp(strtotime($year . "W" . $week . " " . $this->times[$i]["end"] . "+" . ($j - 1) . " day"));
 
                 if ($lecture->getStartingTimestamp() == "" || $lecture->getEndingTimestamp() == "") {
                     return response()->json(['error' => 'Please check your week and year combination'], 500);
                 }
 
-                $place = substr($cell->childNodes->item(5)->nodeValue,0, strpos($cell->childNodes->item(5)->nodeValue, " -"));
-                $lecturer = substr($cell->childNodes->item(5)->nodeValue,strpos($cell->childNodes->item(5)->nodeValue, "- ") + 2);
+                if($cell->childNodes->count() == 7) {
+                    $place = $cell->childNodes->item(5)->nodeValue . substr($cell->childNodes->item(6)->nodeValue, 0, strpos($cell->childNodes->item(6)->nodeValue, " -"));
+                    $lecturer = substr($cell->childNodes->item(6)->nodeValue, strrpos($cell->childNodes->item(6)->nodeValue, "- ") + 2);
+                } else {
+                    $place = substr($cell->childNodes->item(5)->nodeValue, 0, strpos($cell->childNodes->item(5)->nodeValue, " -"));
+                    $lecturer = substr($cell->childNodes->item(5)->nodeValue, strrpos($cell->childNodes->item(5)->nodeValue, "- ") + 2);
+                }
                 $lecture->setPlace($place);
                 $lecture->setLecturer($lecturer);
 
@@ -110,7 +122,6 @@ class TimetableController extends Controller
 
             }
         }
-
         return response()->json($lectures);
 
     }
