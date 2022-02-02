@@ -276,7 +276,7 @@ class TimetableController extends Controller
             foreach ($lectures as $lecture) {
                 $summary = str_replace(' ', ' ',$lecture['module'] . " - " . $lecture['type']);
 
-                $icalObject .= "BEGIN:VEVENT\nDTSTART;TZID=Europe/Berlin:" . date(ICAL_FORMAT, $lecture['startingTimestamp']) . "\nDTEND;TZID=Europe/Berlin:" . date(ICAL_FORMAT, $lecture['endingTimestamp']) . "\nSUMMARY:" . $summary . "\nDESCRIPTION:" . $lecture['lecturer'] . "\nURL:" . $lecture['link'] ."\nUID:" . $lecture['startingTimestamp'] . "_". $lecture['moduleNumber'] . "\nSTATUS:CONFIRMED\nLOCATION:" . $lecture['place'] ."\nEND:VEVENT\n";
+                $icalObject .= "BEGIN:VEVENT\nDTSTART;TZID=Europe/Berlin:" . date("Ymd\THis", $lecture['startingTimestamp']) . "\nDTEND;TZID=Europe/Berlin:" . date("Ymd\THis", $lecture['endingTimestamp']) . "\nSUMMARY:" . $summary . "\nDESCRIPTION:" . $lecture['lecturer'] . "\nURL:" . $lecture['link'] ."\nUID:" . $lecture['startingTimestamp'] . "_". $lecture['moduleNumber'] . "\nSTATUS:CONFIRMED\nLOCATION:" . $lecture['place'] ."\nEND:VEVENT\n";
             }
         }
 
