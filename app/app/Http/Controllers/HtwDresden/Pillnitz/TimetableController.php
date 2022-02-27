@@ -71,7 +71,7 @@ class TimetableController extends Controller
             for ($j = 1; $j < $tableRow->childNodes->count(); $j++) {
                 $cell = $tableRow->childNodes->item($j);
 
-                if ($cell->childNodes->count() != 6 && $cell->childNodes->count() != 7 && $cell->childNodes->count() != 14 && $cell->childNodes->count() != 13) {
+                if ($cell->childNodes->count() != 6 && $cell->childNodes->count() != 7 && $cell->childNodes->count() != 14 && $cell->childNodes->count() != 13 && $cell->childNodes->count() != 27) {
                     continue;
                 }
 
@@ -169,6 +169,115 @@ class TimetableController extends Controller
                         "lecturer" => mb_detect_encoding($lectureTwo->getLecturer()) == "UTF-8" ? utf8_decode($lectureTwo->getLecturer()) : $lectureTwo->getLecturer(),
                         "startingTimestamp" => $lectureTwo->getStartingTimestamp(),
                         "endingTimestamp" => $lectureTwo->getEndingTimestamp(),
+                    ];
+
+                    // 4 lectures same time
+                } elseif ($cell->childNodes->count() == 27) {
+                    $lectureOne = new Lecture();
+                    $lectureTwo = new Lecture();
+                    $lectureThree = new Lecture();
+                    $lectureFour = new Lecture();
+
+                    $lectureOne->setModule($cell->childNodes->item(1)->childNodes->item(0)->nodeValue);
+                    $lectureOne->setModuleNumber(substr($cell->childNodes->item(1)->childNodes->item(2)->nodeValue, 0, 4));
+                    $lectureOne->setType($cell->childNodes->item(3)->nodeValue);
+                    if ($cell->childNodes->item(1)->childNodes->count() > 3 && $cell->childNodes->item(1)->childNodes->item(3)->hasAttributes()) {
+                        $lectureOne->setLink($cell->childNodes->item(1)->childNodes->item(3)->attributes->item(0)->nodeValue);
+                    } else {
+                        $lectureOne->setLink("");
+                    }
+
+                    $lectureTwo->setModule($cell->childNodes->item(8)->childNodes->item(0)->nodeValue);
+                    $lectureTwo->setModuleNumber(substr($cell->childNodes->item(8)->childNodes->item(2)->nodeValue, 0, 4));
+                    $lectureTwo->setType($cell->childNodes->item(10)->nodeValue);
+                    if ($cell->childNodes->item(8)->childNodes->count() > 3 && $cell->childNodes->item(8)->childNodes->item(3)->hasAttributes()) {
+                        $lectureTwo->setLink($cell->childNodes->item(8)->childNodes->item(3)->attributes->item(0)->nodeValue);
+                    } else {
+                        $lectureTwo->setLink("");
+                    }
+
+                    $lectureThree->setModule($cell->childNodes->item(15)->childNodes->item(0)->nodeValue);
+                    $lectureThree->setModuleNumber(substr($cell->childNodes->item(15)->childNodes->item(2)->nodeValue, 0, 4));
+                    $lectureThree->setType($cell->childNodes->item(17)->nodeValue);
+                    if ($cell->childNodes->item(15)->childNodes->count() > 3 && $cell->childNodes->item(15)->childNodes->item(3)->hasAttributes()) {
+                        $lectureThree->setLink($cell->childNodes->item(15)->childNodes->item(3)->attributes->item(0)->nodeValue);
+                    } else {
+                        $lectureThree->setLink("");
+                    }
+
+                    $lectureFour->setModule($cell->childNodes->item(22)->childNodes->item(0)->nodeValue);
+                    $lectureFour->setModuleNumber(substr($cell->childNodes->item(22)->childNodes->item(2)->nodeValue, 0, 4));
+                    $lectureFour->setType($cell->childNodes->item(24)->nodeValue);
+                    if ($cell->childNodes->item(22)->childNodes->count() > 3 && $cell->childNodes->item(22)->childNodes->item(3)->hasAttributes()) {
+                        $lectureFour->setLink($cell->childNodes->item(22)->childNodes->item(3)->attributes->item(0)->nodeValue);
+                    } else {
+                        $lectureFour->setLink("");
+                    }
+
+                    $lectureOne->setStartingTimestamp(strtotime($year . "W" . $week . " " . $this->times[$i]["start"] . "+" . ($j - 1) . " day"));
+                    $lectureTwo->setStartingTimestamp(strtotime($year . "W" . $week . " " . $this->times[$i]["start"] . "+" . ($j - 1) . " day"));
+                    $lectureThree->setStartingTimestamp(strtotime($year . "W" . $week . " " . $this->times[$i]["start"] . "+" . ($j - 1) . " day"));
+                    $lectureFour->setStartingTimestamp(strtotime($year . "W" . $week . " " . $this->times[$i]["start"] . "+" . ($j - 1) . " day"));
+                    $lectureOne->setEndingTimestamp(strtotime($year . "W" . $week . " " . $this->times[$i]["end"] . "+" . ($j - 1) . " day"));
+                    $lectureTwo->setEndingTimestamp(strtotime($year . "W" . $week . " " . $this->times[$i]["end"] . "+" . ($j - 1) . " day"));
+                    $lectureThree->setEndingTimestamp(strtotime($year . "W" . $week . " " . $this->times[$i]["end"] . "+" . ($j - 1) . " day"));
+                    $lectureFour->setEndingTimestamp(strtotime($year . "W" . $week . " " . $this->times[$i]["end"] . "+" . ($j - 1) . " day"));
+                    if ($lectureOne->getStartingTimestamp() == "" || $lectureOne->getEndingTimestamp() == "" || $lectureTwo->getStartingTimestamp() == "" || $lectureTwo->getEndingTimestamp() == "" || $lectureThree->getStartingTimestamp() == "" || $lectureThree->getEndingTimestamp() == "" || $lectureFour->getStartingTimestamp() == "" || $lectureFour->getEndingTimestamp() == "") {
+                        return response()->json(['error' => 'Please check your week and year combination'], 500);
+                    }
+
+                    // ignore this stuff for now
+                    $lectureOne->setPlace("");
+                    $lectureTwo->setPlace("");
+                    $lectureThree->setPlace("");
+                    $lectureFour->setPlace("");
+                    $lectureOne->setLecturer("");
+                    $lectureTwo->setLecturer("");
+                    $lectureThree->setLecturer("");
+                    $lectureFour->setLecturer("");
+
+                    $lectures[] = [
+                        "module" => mb_detect_encoding($lectureOne->getModule()) == "UTF-8" ? utf8_decode($lectureOne->getModule()) : $lectureOne->getModule(),
+                        "moduleNumber" => mb_detect_encoding($lectureOne->getModuleNumber()) == "UTF-8" ? utf8_decode($lectureOne->getModuleNumber()) : $lectureOne->getModuleNumber(),
+                        "link" => $lectureOne->getLink(),
+                        "type" => mb_detect_encoding($lectureOne->getType()) == "UTF-8" ? utf8_decode($lectureOne->getType()) : $lectureOne->getType(),
+                        "place" => mb_detect_encoding($lectureOne->getPlace()) == "UTF-8" ? utf8_decode($lectureOne->getPlace()) : $lectureOne->getPlace(),
+                        "lecturer" => mb_detect_encoding($lectureOne->getLecturer()) == "UTF-8" ? utf8_decode($lectureOne->getLecturer()) : $lectureOne->getLecturer(),
+                        "startingTimestamp" => $lectureOne->getStartingTimestamp(),
+                        "endingTimestamp" => $lectureOne->getEndingTimestamp(),
+                    ];
+
+                    $lectures[] = [
+                        "module" => mb_detect_encoding($lectureTwo->getModule()) == "UTF-8" ? utf8_decode($lectureTwo->getModule()) : $lectureTwo->getModule(),
+                        "moduleNumber" => mb_detect_encoding($lectureTwo->getModuleNumber()) == "UTF-8" ? utf8_decode($lectureTwo->getModuleNumber()) : $lectureTwo->getModuleNumber(),
+                        "link" => $lectureTwo->getLink(),
+                        "type" => mb_detect_encoding($lectureTwo->getType()) == "UTF-8" ? utf8_decode($lectureTwo->getType()) : $lectureTwo->getType(),
+                        "place" => mb_detect_encoding($lectureTwo->getPlace()) == "UTF-8" ? utf8_decode($lectureTwo->getPlace()) : $lectureTwo->getPlace(),
+                        "lecturer" => mb_detect_encoding($lectureTwo->getLecturer()) == "UTF-8" ? utf8_decode($lectureTwo->getLecturer()) : $lectureTwo->getLecturer(),
+                        "startingTimestamp" => $lectureTwo->getStartingTimestamp(),
+                        "endingTimestamp" => $lectureTwo->getEndingTimestamp(),
+                    ];
+
+                    $lectures[] = [
+                        "module" => mb_detect_encoding($lectureThree->getModule()) == "UTF-8" ? utf8_decode($lectureThree->getModule()) : $lectureThree->getModule(),
+                        "moduleNumber" => mb_detect_encoding($lectureThree->getModuleNumber()) == "UTF-8" ? utf8_decode($lectureThree->getModuleNumber()) : $lectureThree->getModuleNumber(),
+                        "link" => $lectureThree->getLink(),
+                        "type" => mb_detect_encoding($lectureThree->getType()) == "UTF-8" ? utf8_decode($lectureThree->getType()) : $lectureThree->getType(),
+                        "place" => mb_detect_encoding($lectureThree->getPlace()) == "UTF-8" ? utf8_decode($lectureThree->getPlace()) : $lectureThree->getPlace(),
+                        "lecturer" => mb_detect_encoding($lectureThree->getLecturer()) == "UTF-8" ? utf8_decode($lectureThree->getLecturer()) : $lectureThree->getLecturer(),
+                        "startingTimestamp" => $lectureThree->getStartingTimestamp(),
+                        "endingTimestamp" => $lectureThree->getEndingTimestamp(),
+                    ];
+
+                    $lectures[] = [
+                        "module" => mb_detect_encoding($lectureFour->getModule()) == "UTF-8" ? utf8_decode($lectureFour->getModule()) : $lectureFour->getModule(),
+                        "moduleNumber" => mb_detect_encoding($lectureFour->getModuleNumber()) == "UTF-8" ? utf8_decode($lectureFour->getModuleNumber()) : $lectureFour->getModuleNumber(),
+                        "link" => $lectureFour->getLink(),
+                        "type" => mb_detect_encoding($lectureFour->getType()) == "UTF-8" ? utf8_decode($lectureFour->getType()) : $lectureFour->getType(),
+                        "place" => mb_detect_encoding($lectureFour->getPlace()) == "UTF-8" ? utf8_decode($lectureFour->getPlace()) : $lectureFour->getPlace(),
+                        "lecturer" => mb_detect_encoding($lectureFour->getLecturer()) == "UTF-8" ? utf8_decode($lectureFour->getLecturer()) : $lectureFour->getLecturer(),
+                        "startingTimestamp" => $lectureFour->getStartingTimestamp(),
+                        "endingTimestamp" => $lectureFour->getEndingTimestamp(),
                     ];
 
                 } else {
