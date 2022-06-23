@@ -44,3 +44,9 @@ $router->group(['prefix' => 'htw-dresden'], function () use ($router) {
 
     });
 });
+
+$router->group(['prefix' => 'date-time'], function() use ($router) {
+    $router->get('/current-time', [
+        'as' => 'current-time', 'uses' => 'DateTime\TimeController@getCurrentTimeInGermany'
+    ]);
+});
