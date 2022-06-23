@@ -19,9 +19,9 @@ class TimeController extends Controller
         $time->setSecond(date("s",$timestamp));
 
         return response()->json([
-            'hour' => $time->getHour(),
-            'minute' => $time->getMinute(),
-            'second' => $time->getSecond()
+            'hour' => (int) $time->getHour(),
+            'minute' => (int) $time->getMinute(),
+            'second' => (int) $time->getSecond()
         ]);
     }
 }
