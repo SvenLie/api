@@ -19,7 +19,7 @@ $router->get('/', function () use ($router) {
         if ($value['uri'] == '/') {
             continue;
         }
-        echo $value['uri'] . "<br />";
+        echo $value['uri'] . " (". $value['method'] . ")<br />";
     }
 });
 
@@ -48,5 +48,15 @@ $router->group(['prefix' => 'htw-dresden'], function () use ($router) {
 $router->group(['prefix' => 'date-time'], function() use ($router) {
     $router->get('/current-time', [
         'as' => 'current-time', 'uses' => 'DateTime\TimeController@getCurrentTimeInGermany'
+    ]);
+});
+
+$router->group(['prefix' => 'automation'], function() use ($router) {
+    $router->get('/presence', [
+        'as' => 'presence', 'uses' => 'Automation\PresenceController@getCurrentPresenceStatus'
+    ]);
+
+    $router->post('/presence', [
+        'as' => 'presence', 'uses' => 'Automation\PresenceController@setCurrentPresenceStatus'
     ]);
 });
