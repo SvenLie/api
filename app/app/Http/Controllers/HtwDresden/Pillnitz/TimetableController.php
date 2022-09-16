@@ -151,7 +151,7 @@ class TimetableController extends Controller
 
                     $lectures[] = [
                         "module" => mb_detect_encoding($lectureOne->getModule()) == "UTF-8" ? utf8_decode($lectureOne->getModule()) : $lectureOne->getModule(),
-                        "moduleNumber" => mb_detect_encoding($lectureOne->getModuleNumber()) == "UTF-8" ? utf8_decode($lectureOne->getModuleNumber()) : $lectureOne->getModuleNumber(),
+                        "moduleNumber" => "",
                         "link" => $lectureOne->getLink(),
                         "type" => mb_detect_encoding($lectureOne->getType()) == "UTF-8" ? utf8_decode($lectureOne->getType()) : $lectureOne->getType(),
                         "place" => mb_detect_encoding($lectureOne->getPlace()) == "UTF-8" ? utf8_decode($lectureOne->getPlace()) : $lectureOne->getPlace(),
