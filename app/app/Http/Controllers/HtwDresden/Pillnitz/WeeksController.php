@@ -24,7 +24,8 @@ class WeeksController extends Controller
         $currentWeek = $this->getCurrentWeek();
 
         if ($weekMaximum < $weekMinimum) {
-            if ($currentWeek < $weekMinimum) {
+            // puffer after end of semester to adjust timetable
+            if ($currentWeek > 0 && $currentWeek < $weekMaximum + 10) {
                 $currentYear = $currentYear - 1;
             }
 
