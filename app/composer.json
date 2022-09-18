@@ -6,12 +6,13 @@
     "type": "project",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-dom": "*",
+        "ext-iconv": "*",
+        "ext-json": "*",
+        "ext-libxml": "*",
         "guzzlehttp/guzzle": "^7.0",
         "laravel/lumen-framework": "^8.3.1",
-        "ext-dom": "*",
-        "ext-libxml": "*",
-        "ext-json": "*",
-        "ext-iconv": "*"
+        "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
