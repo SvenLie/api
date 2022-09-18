@@ -18,8 +18,6 @@ class CreateGameSetItemTable extends Migration
             $table->integer('game_set_id')->unsigned();
             $table->string('name');
             $table->timestamps();
-
-            $table->foreign('game_set_id')->references('id')->on('game_set')->onDelete('cascade');
         });
     }
 

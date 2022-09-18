@@ -21,8 +21,6 @@ class CreateRuleSetTable extends Migration
             $table->integer('left_over_amount');
             $table->integer('choice_amount');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

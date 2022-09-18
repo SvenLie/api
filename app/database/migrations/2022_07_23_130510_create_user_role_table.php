@@ -18,8 +18,6 @@ class CreateUserRoleTable extends Migration
             $table->string('identifier')->unique();
             $table->string('name');
             $table->boolean('isSelfAssignable')->default(false);
-
-            $table->foreign('id')->references('user_role_id')->on('user_user_role')->onDelete('cascade');
         });
     }
 

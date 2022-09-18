@@ -22,10 +22,6 @@ class CreateGameTable extends Migration
             $table->string('join_code');
             $table->boolean('finished');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('rule_set_id')->references('id')->on('rule_set')->onDelete('cascade');
-            $table->foreign('game_set_id')->references('id')->on('game_set')->onDelete('cascade');
         });
     }
 
