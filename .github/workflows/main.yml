@@ -15,7 +15,7 @@ jobs:
       with:
         dev: no
         args: --working-dir=app
-        php_version: 8.1
+        php_version: 7.4
         progress: yes
     - name: rsync deployments
       uses: burnett01/rsync-deployments@4.1
