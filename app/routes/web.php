@@ -103,3 +103,20 @@ $router->group(['prefix' => 'pick-and-ban'], function () use ($router) {
         $router->post('/rule-set', 'PickAndBan\RuleSetController@editRuleSet');
     });
 });
+
+$router->group(['prefix' => 'recipes'], function () use ($router) {
+    $router->group(['middleware' => ['auth', 'hasRoleRecipes']], function () use ($router) {
+        # GET ROUTES
+        $router->get('/', 'Recipes\RecipeController@getOwnRecipes');
+        $router->get('/recipe', 'Recipes\RecipeController@getRecipe');
+
+        # CREATE ROUTES
+        $router->put('/recipe', 'Recipes\RecipeController@createRecipe');
+
+        # DELETE ROUTES
+        $router->delete('/recipe', 'Recipes\RecipeController@deleteRecipe');
+
+        # EDIT ROUTES
+        $router->post('/recipe', 'Recipes\RecipeController@editRecipe');
+    });
+});
