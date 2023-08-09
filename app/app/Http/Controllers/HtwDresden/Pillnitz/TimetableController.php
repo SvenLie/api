@@ -352,7 +352,7 @@ class TimetableController extends Controller
     }
 
     protected function getTimetable($course, $week, $group = null) {
-        $url = "https://www2.htw-dresden.de/~birthv/cgi-bin/pill/raiplan_pill.cgi?eingabe=" . $course . "&kweingabe=" . $week;
+        $url = "https://www2.htw-dresden.de/~stpill/stuplan/raiplan_pill.cgi?eingabe=" . $course . "&kweingabe=" . $week;
 
         if ($group) {
             $url .= "&gruppeneing=" . $group;

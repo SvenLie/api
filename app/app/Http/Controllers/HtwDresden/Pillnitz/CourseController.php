@@ -41,7 +41,7 @@ class CourseController extends Controller
     }
 
     protected function getCourseTable() {
-        $url = "https://www2.htw-dresden.de/~birthv/cgi-bin/pill/raiplan_pill.cgi";
+        $url = "https://www2.htw-dresden.de/~stpill/stuplan/raiplan_pill.cgi";
 
         $response = Http::get($url);
 

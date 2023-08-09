@@ -73,7 +73,7 @@ class WeeksController extends Controller
     }
 
     protected function getWeeksTable() {
-        $url = "https://www2.htw-dresden.de/~birthv/cgi-bin/pill/raiplan_pill.cgi";
+        $url = "https://www2.htw-dresden.de/~stpill/stuplan/raiplan_pill.cgi?";
 
         $response = Http::get($url);
 
