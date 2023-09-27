@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\HtwDresden\Pillnitz\Legacy;
 
 use App\Http\Controllers\Controller;
-use App\Models\HtwDresden\Pillnitz\Lecture;
+use App\Models\HtwDresden\Pillnitz\Legacy\Lecture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 

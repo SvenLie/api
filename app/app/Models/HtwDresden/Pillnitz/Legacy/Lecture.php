@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\HtwDresden\Pillnitz;
+namespace App\Models\HtwDresden\Pillnitz\Legacy;
 
 use Illuminate\Database\Eloquent\Model;
 

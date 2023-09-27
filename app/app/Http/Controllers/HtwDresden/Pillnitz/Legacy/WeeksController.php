@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\HtwDresden\Pillnitz\Legacy;
 
 use App\Http\Controllers\Controller;
-use App\Models\HtwDresden\Pillnitz\Week;
+use App\Models\HtwDresden\Pillnitz\Legacy\Week;
 use Illuminate\Support\Facades\Http;
 
 class WeeksController extends Controller

@@ -48,11 +48,11 @@ $router->group(['prefix' => 'htw-dresden'], function () use ($router) {
             'as' => 'weeks', 'uses' => 'HtwDresden\Pillnitz\Legacy\WeeksController@index'
         ]);
 
-        /*$router->group(['prefix' => 'v2'], function () use ($router) {
+        $router->group(['prefix' => 'v2'], function () use ($router) {
             $router->get('/timetable/{course}', [
                 'as' => 'timetable', 'uses' => 'HtwDresden\Pillnitz\V2\TimetableController@index'
             ]);
-        });*/
+        });
 
     });
 });
