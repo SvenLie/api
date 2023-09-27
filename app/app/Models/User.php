@@ -42,36 +42,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->belongsToMany(UserRole::class);
     }
 
-    public function gameSets()
-    {
-        return $this->hasMany(GameSet::class);
-    }
-
-    public function ruleSets()
-    {
-        return $this->hasMany(RuleSet::class);
-    }
-
-    public function games()
-    {
-        return $this->hasMany(Game::class);
-    }
-
-    public function recipes()
-    {
-        return $this->hasMany(Recipe::class);
-    }
-
-    public function ingredients()
-    {
-        return $this->hasMany(Ingredient::class);
-    }
-
-    public function ingredientSections()
-    {
-        return $this->hasMany(IngredientSection::class);
-    }
-
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

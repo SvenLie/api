@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\HtwDresden\Pillnitz;
+namespace App\Http\Controllers\HtwDresden\Pillnitz\Legacy;
 
 use App\Http\Controllers\Controller;
 use App\Models\HtwDresden\Pillnitz\Lecture;
