@@ -24,9 +24,37 @@ class TimetableController extends Controller
         5 => 'Freitag',
     ];
 
+    public function modules(Request $request): JsonResponse
+    {
+        $studentNumber = $request->get("matNumber");
+
+        if(!$studentNumber) {
+            return response()->json(['error' => 'No student number (Matrikelnummer) applied'], 500);
+        }
+
+        $lectureDays = $this->lectures($request)->getData(true);
+        $uniqueModules = [];
+
+        foreach ($lectureDays as $lectures) {
+            foreach ($lectures as $lecture) {
+                $uniqueModules[str_replace('/', '-', $lecture['moduleNumber'])] = $lecture['module'];
+            }
+        }
+
+        asort($uniqueModules);
+
+        return response()->json($uniqueModules);
+    }
+
     public function lectures(Request $request): JsonResponse
     {
         $studentNumber = $request->get("matNumber");
+        $ignoredModules = $request->get('ignoredModules');
+
+        $ignoredModulesArray = [];
+        if ($ignoredModules) {
+            $ignoredModulesArray = explode(',', $ignoredModules);
+        }
 
         if(!$studentNumber) {
             return response()->json(['error' => 'No student number (Matrikelnummer) applied'], 500);
@@ -35,7 +63,7 @@ class TimetableController extends Controller
         libxml_use_internal_errors(true);
         $html = new \DOMDocument;
         $html->loadHTML($this->getTimetableHTML($studentNumber));
-        return response()->json($this->convertTimetableToLectures($html));
+        return response()->json($this->convertTimetableToLectures($html, $ignoredModulesArray));
     }
 
     /**
@@ -44,7 +72,7 @@ class TimetableController extends Controller
      */
     public function timetable(Request $request): JsonResponse
     {
-        $studentNumber = $request->get("matNumber");
+        $studentNumber = $request->get('matNumber');
 
         if(!$studentNumber) {
             return response()->json(['error' => 'No student number (Matrikelnummer) applied'], 500);
@@ -166,7 +194,7 @@ class TimetableController extends Controller
         return $dates;
     }
 
-    public function convertTimetableToLectures(\DOMDocument $html): array
+    public function convertTimetableToLectures(\DOMDocument $html, array $ignoredModules): array
     {
         $xml = simplexml_import_dom($html);
         $tableRows = $xml->xpath('//div[@id="list-compact"]/descendant::table/tr');
@@ -188,6 +216,10 @@ class TimetableController extends Controller
                 'place' => trim($elements[7]->div->__toString()),
                 'lecturer' => trim($elements[9]->__toString())
             ]);
+
+            if (in_array(str_replace('/', '-', $lecture->moduleNumber), $ignoredModules)) {
+                continue;
+            }
 
             // Gremienblockzeit
             if ($lecture->type == "Block") {
