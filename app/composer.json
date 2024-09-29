@@ -11,8 +11,9 @@
         "ext-json": "*",
         "ext-libxml": "*",
         "guzzlehttp/guzzle": "^7.0",
-        "laravel/lumen-framework": "^9.0",
-        "php-open-source-saver/jwt-auth": "^2.0"
+        "laravel/lumen-framework": "^11.0",
+        "php-open-source-saver/jwt-auth": "^2.0",
+        "ext-simplexml": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
