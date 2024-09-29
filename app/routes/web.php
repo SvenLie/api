@@ -30,6 +30,18 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'htw-dresden'], function () use ($router) {
+    $router->get('/lectures', [
+       'as' => 'htw-lectures', 'uses' =>  'HtwDresden\Timetable\TimetableController@lectures'
+    ]);
+
+    $router->get('/timetable', [
+        'as' => 'htw-timetable', 'uses' =>  'HtwDresden\Timetable\TimetableController@timetable'
+    ]);
+
+    $router->get('/timetable-ical', [
+        'as' => 'htw-timetable-ical', 'uses' =>  'HtwDresden\Timetable\TimetableController@timetableICAL'
+    ]);
+
     $router->group(['prefix' => 'pillnitz'], function () use ($router) {
 
         $router->get('/timetable-ical/{course}', [
