@@ -37,7 +37,10 @@ class TimetableController extends Controller
 
         foreach ($lectureDays as $lectures) {
             foreach ($lectures as $lecture) {
-                $uniqueModules[str_replace('/', '-', $lecture['moduleNumber'])] = $lecture['module'];
+                $uniqueModules[str_replace('/', '-', $lecture['moduleNumber'])] = [
+                    'module' => $lecture['module'],
+                    'moduleNumber' => $lecture['moduleNumber']
+                ];
             }
         }
 
