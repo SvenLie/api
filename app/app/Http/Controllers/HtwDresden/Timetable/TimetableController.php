@@ -111,27 +111,29 @@ class TimetableController extends Controller
 
             $germanWeekday = $this->weekdays[$weekday];
 
-            foreach ($lectures[$germanWeekday] as $lecture) {
-                if ($lecture['period'] == 'Gerade Woche' && $isWeekOdd == 1) {
-                    continue;
+            if (isset($lectures[$germanWeekday])) {
+                foreach ($lectures[$germanWeekday] as $lecture) {
+                    if ($lecture['period'] == 'Gerade Woche' && $isWeekOdd == 1) {
+                        continue;
+                    }
+
+                    if ($lecture['period'] == 'Ungerade Woche' && $isWeekOdd == 0) {
+                        continue;
+                    }
+
+                    $startArray = explode(":", $lecture['start']);
+                    $endArray = explode(":", $lecture['end']);
+
+                    $timetableEntries[] = [
+                        'moduleNumber' => $lecture['moduleNumber'],
+                        'module' => $lecture['module'],
+                        'place' => $lecture['place'],
+                        'lecturer' => $lecture['lecturer'],
+                        'type' => $lecture['type'],
+                        'startTimestamp' => (new DateTime($value->format('d.m.Y')))->setTime($startArray[0], $startArray[1])->getTimestamp(),
+                        'endTimestamp' => (new DateTime($value->format('d.m.Y')))->setTime($endArray[0], $endArray[1])->getTimestamp()
+                    ];
                 }
-
-                if ($lecture['period'] == 'Ungerade Woche' && $isWeekOdd == 0) {
-                    continue;
-                }
-
-                $startArray = explode(":", $lecture['start']);
-                $endArray = explode(":", $lecture['end']);
-
-                $timetableEntries[] = [
-                    'moduleNumber' => $lecture['moduleNumber'],
-                    'module' => $lecture['module'],
-                    'place' => $lecture['place'],
-                    'lecturer' => $lecture['lecturer'],
-                    'type' => $lecture['type'],
-                    'startTimestamp' => (new DateTime($value->format('d.m.Y')))->setTime($startArray[0], $startArray[1])->getTimestamp(),
-                    'endTimestamp' => (new DateTime($value->format('d.m.Y')))->setTime($endArray[0], $endArray[1])->getTimestamp()
-                ];
             }
         }
 
