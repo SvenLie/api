@@ -30,6 +30,10 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'htw-dresden'], function () use ($router) {
+    $router->get('/modules', [
+        'as' => 'htw-modules', 'uses' =>  'HtwDresden\Timetable\TimetableController@modules'
+    ]);
+
     $router->get('/lectures', [
        'as' => 'htw-lectures', 'uses' =>  'HtwDresden\Timetable\TimetableController@lectures'
     ]);
