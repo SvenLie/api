@@ -193,7 +193,13 @@ class TimetableController extends Controller
         $xml = simplexml_import_dom($html);
         $title = $xml->xpath('//div[@id="tx-htwdd-timetable"]/descendant::h3/text()')[0]->__toString();
 
-        $dates['start'] = substr($title, strpos($title, "(") + 1, 10);
+        $startDate = substr($title, strpos($title, "(") + 1, 10);
+
+        // if start and end date are in the same year the substr above is not working
+        if (DateTime::createFromFormat('d.m.Y', $startDate) === false) {
+            $startDate = substr($title, strpos($title, "(") + 1, 6) . date('Y');
+        }
+        $dates['start'] = $startDate;
         $dates['end'] = substr($title, strpos($title, ")") - 10, 10);
 
         return $dates;
@@ -211,7 +217,7 @@ class TimetableController extends Controller
         foreach ($tableRows as $tableRow) {
             $elements = $tableRow->td;
             $lecture = new Lecture([
-                'moduleNumber' => substr(trim($elements[0]->__toString()), 1, strpos(trim($elements[0]->__toString()), " ") - 1),
+                'moduleNumber' => substr(trim($elements[0]->__toString()), 0, strpos(trim($elements[0]->__toString()), " ")),
                 'module' => trim($elements[1]->__toString()),
                 'type' => trim($elements[2]->__toString()),
                 'weekday' => trim($elements[3]->__toString()),
